@@ -1,0 +1,5 @@
+authorized_chats.json
+__pycache__/
+.env
+.idea/
+.vscode/

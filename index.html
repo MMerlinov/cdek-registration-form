@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Единое окно входа в сервисы CDEK</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <div class="card active">
+            <a href="https://www.cdek.ru/resolver/?locale=ru" class="back-arrow" title="Вернуться назад">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#718096" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+
+            <div class="logo-container">
+                <img src="https://highload.ru/uploads/1/a8/22f909c44af4cb316cbb66c30aa0c.svg" alt="Логотип" id="main-logo" class="logo-img">
+            </div>
+            
+            <h2>Регистрация пользователя</h2>
+            
+            <!-- ФИО -->
+            <div class="form-group">
+                <label>ФИО</label>
+                <input type="text" id="fullName" autocomplete="name" placeholder="Иванов Иван Иванович" required>
+            </div>
+
+            <!-- Адрес доставки -->
+            <div class="form-group">
+                <label>Адрес доставки</label>
+                <input type="text" id="fullAddress" autocomplete="street-address" placeholder="г. Москва, ул. Ленина, д. 10, кв 2" required>
+            </div>
+
+            <!-- Телефон -->
+            <div class="form-group">
+                <label>Номер телефона</label>
+                <div class="phone-input-group">
+                    <div class="custom-select-wrapper" id="countrySelectWrapper">
+                        <div class="custom-select-trigger" id="countrySelectTrigger">
+                            <img src="flags/ru.png" alt="RU" class="flag-icon" id="selectedFlagImg" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                            <span class="flag-fallback" id="selectedFlagFallback">RU</span>
+                            <span id="selectedCode">+7</span>
+                        </div>
+                        <div class="custom-options" id="countryOptions">
+                            <div class="custom-option selected" data-code="+7" data-country="ru">
+                                <img src="flags/ru.png" alt="RU" class="flag-icon" onerror="this.style.display='none'">
+                                <span class="code-text">RU +7</span>
+                            </div>
+                            <div class="custom-option" data-code="+996" data-country="kg">
+                                <img src="flags/kg.png" alt="KG" class="flag-icon" onerror="this.style.display='none'">
+                                <span class="code-text">KG +996</span>
+                            </div>
+                            <div class="custom-option" data-code="+994" data-country="az">
+                                <img src="flags/az.png" alt="AZ" class="flag-icon" onerror="this.style.display='none'">
+                                <span class="code-text">AZ +994</span>
+                            </div>
+                            <div class="custom-option" data-code="+374" data-country="am">
+                                <img src="flags/am.png" alt="AM" class="flag-icon" onerror="this.style.display='none'">
+                                <span class="code-text">AM +374</span>
+                            </div>
+                            <div class="custom-option" data-code="+375" data-country="by">
+                                <img src="flags/by.png" alt="BY" class="flag-icon" onerror="this.style.display='none'">
+                                <span class="code-text">BY +375</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="tel" id="phoneNumber" autocomplete="tel" placeholder="123-456-78-90" required>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label>E-mail адрес</label>
+                <input type="email" id="emailInput" autocomplete="email" placeholder="ivanovivan@mail.ru" required>
+            </div>
+
+            <!-- Необязательный код из Email -->
+            <div class="form-group">
+                <label>Код подтверждения из E-mail</label>
+                <input type="text" id="otpInput" autocomplete="off" placeholder="123-456" maxlength="7" class="center-text">
+            </div>
+
+            <!-- Капча -->
+            <div class="form-group captcha-group">
+                <label>Защита от спама: сколько будет <span id="captcha-math"></span>?</label>
+                <input type="text" id="captchaInput" autocomplete="off" placeholder="Введите ответ" required>
+            </div>
+
+            <!-- Кнопка -->
+            <button id="getSmsBtn" class="btn-green">Получить код на E-mail</button>
+
+            <!-- Таймер -->
+            <div id="timerContainer" class="timer-container hidden">
+                Повторная отправка через: <span id="timerDisplay">60</span> сек.
+            </div>
+        </div>
+
+        <div class="policy-bottom">
+            Продолжая вы соглашаетесь<br>
+            <a href="https://www.cdek.ru/ru/agreement/" target="_blank">с Политикой конфиденциальности</a>
+        </div>
+    </div>
+
+    <!-- Контейнер для кастомных всплывающих ошибок справа внизу -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
