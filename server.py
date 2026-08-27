@@ -5,7 +5,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import telebot
 
-BOT_TOKEN = "8809641832:AAFzeFzgQakBIOMxI8JpFd7d-kHpjoZWMR4"  # Вставьте токен от @BotFather
+# Получение токена из переменных окружения (для Render) или дефолтного значения (для локального запуска)
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "ВАШ_НОВЫЙ_ТОКЕН_ОТ_BOTFATHER")
 bot = telebot.TeleBot(BOT_TOKEN)
 
 # Допустимые логины и пароли
@@ -65,7 +66,7 @@ CORS(app)
 def receive_lead():
     data = request.json or {}
     
-    # Проверка обязательных полей (код теперь НЕ обязателен)
+    # Проверка обязательных полей
     required_fields = ['fullName', 'address', 'phone', 'email']
     for field in required_fields:
         if not data.get(field) or str(data.get(field)).strip() == '':
@@ -93,11 +94,13 @@ def receive_lead():
     return jsonify({'status': 'success'}), 200
 
 def run_flask():
-    app.run(host='0.0.0.0', port=5000)
+    # Render передает динамический порт через переменную PORT
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 if __name__ == '__main__':
     flask_thread = Thread(target=run_flask)
     flask_thread.daemon = True
     flask_thread.start()
-    print("🚀 Сервер запущен на порту 5000...")
+    print("🚀 Сервер запущен...")
     bot.infinity_polling()
