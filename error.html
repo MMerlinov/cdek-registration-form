@@ -200,13 +200,13 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            text-align: center; /* Текст выровнен по центру */
+            text-align: center;
         }
 
         .side-error-header {
             display: flex;
             align-items: center;
-            justify-content: center; /* Иконка и заголовок по центру */
+            justify-content: center;
             gap: 8px;
             color: #dc2626;
             font-weight: 700;
@@ -233,9 +233,9 @@
             align-items: center;
             gap: 6px;
             padding: 8px 14px;
-            background-color: #f0f4ff; /* Светло-синий фон */
-            color: #2764FC; /* Синий текст */
-            border: 1px dashed #93b2ff; /* Синяя пунктирная рамка */
+            background-color: #f0f4ff;
+            color: #2764FC;
+            border: 1px dashed #93b2ff;
             border-radius: 6px;
             font-size: 14px;
             font-weight: 700;
@@ -304,6 +304,7 @@
                 top: auto;
                 width: 100%;
                 max-width: 380px;
+                order: -1; /* Помещает карточку ошибки САМОЙ ПЕРВОЙ над формой */
             }
         }
     </style>
@@ -312,7 +313,7 @@
 
     <div class="main-container">
         
-        <!-- Форма авторизации (строго по центру) -->
+        <!-- Форма авторизации (строго по центру на ПК) -->
         <div class="form-column">
             <div class="card">
                 <div class="logo-container">
@@ -353,7 +354,7 @@
             </div>
         </div>
 
-        <!-- Уведомление об ошибке сбоку (выровнено по центру) -->
+        <!-- Уведомление об ошибке (справа на ПК, сверху на мобильных) -->
         <div class="side-error-card">
             <div class="side-error-header">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
