@@ -3,119 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Доступ ограничен</title>
+    <title>Портал государственных услуг Российской Федерации</title>
     <style>
         * {
             box-sizing: border-box;
         }
 
         body {
-            background-color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            color: #000000;
-            /* Выравнивание точно по центру экрана */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e4ecfd;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            position: relative;
         }
 
-        .block-container {
+        /* Общий контейнер, центрирующий форму по экрану */
+        .main-container {
+            position: relative;
             display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            max-width: 680px;
+            justify-content: center;
+            align-items: center;
             width: 100%;
         }
 
-        .lock-icon-container {
-            flex-shrink: 0;
-            width: 52px;
-            height: 52px;
-            border: 2px solid #a81c1c;
-            border-radius: 50%;
+        /* Центральная колонка с формой */
+        .form-column {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 380px;
+            z-index: 1;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            width: 100%;
+        }
+
+        /* Контейнер логотипа */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-img {
+            max-height: 130px;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .logo-placeholder {
+            font-size: 22px;
+            font-weight: 800;
+            color: #005FF9;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: #f2f3f5;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            background-color: #ffffff;
+            border-color: #2764FC;
+        }
+
+        .link-restore {
+            display: inline-block;
+            color: #2764FC;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background-color: #005FF9;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056e0;
+        }
+
+        .link-cant-login {
+            display: block;
+            text-align: center;
+            color: #2764FC;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #e1e3e6;
+            margin: 0 -30px 24px -30px;
+        }
+
+        .alt-login-text {
+            font-size: 14px;
+            color: #000;
+            margin-bottom: 16px;
+        }
+        
+        .alt-login-text a {
+            color: #2764FC;
+            text-decoration: none;
+        }
+
+        .btn-outline {
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            color: #2764FC;
+            border: 1px solid #2764FC;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(39, 100, 252, 0.05);
+        }
+        
+        .btn-outline:last-child {
+            margin-bottom: 0;
+        }
+
+        .register-link-container {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .register-link-container a {
+            color: #2764FC;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        
+        .register-link-container a:hover,
+        .link-restore:hover,
+        .link-cant-login:hover,
+        .alt-login-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- КАРТОЧКА ОШИБКИ СПРАВА ОТ ЦЕНТРАЛЬНОЙ ФОРМЫ --- */
+        .side-error-card {
+            position: absolute;
+            left: calc(50% + 190px + 20px); /* Половина ширины формы (190px) + отступ 20px */
+            top: 0;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 22px 20px;
+            width: 320px;
+            border: 1px solid #fecaca;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .side-error-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-
-        .lock-icon-container svg {
-            width: 24px;
-            height: 24px;
-            fill: #a81c1c;
-        }
-
-        .content-box {
-            display: flex;
-            flex-direction: column;
-        }
-
-        h1 {
-            font-size: 20px;
-            font-weight: 700;
-            line-height: 1.35;
-            margin: 0 0 12px 0;
-            color: #000000;
-        }
-
-        .links-group {
-            display: flex;
-            flex-direction: column;
             gap: 8px;
+            color: #dc2626;
+            font-weight: 700;
+            font-size: 15px;
         }
 
-        .reason-link {
-            color: #8c8c8c;
+        .side-error-body {
             font-size: 13px;
-            text-decoration: underline;
-            cursor: pointer;
-            width: fit-content;
+            line-height: 1.5;
+            color: #4b5563;
         }
 
-        .reason-link:hover {
-            color: #555555;
-        }
-
-        .main-site-link {
-            color: #3182ce;
-            font-size: 13px;
+        .phone-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding: 8px 14px;
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px dashed #fca5a5;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
             text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
             width: fit-content;
-            margin-top: 4px;
         }
 
-        .main-site-link:hover {
-            text-decoration: underline;
+        .phone-btn:hover {
+            background-color: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .copy-tooltip {
+            font-size: 11px;
+            color: #16a34a;
+            display: none;
+            margin-left: 6px;
+            font-weight: 500;
+        }
+
+        /* --- УВЕДОМЛЕНИЯ ВНИЗУ СЛЕВА --- */
+        #toastContainer {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        .toast-error {
+            background-color: #dc2626;
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-family: monospace, -apple-system, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast-error.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 880px) {
+            .main-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .side-error-card {
+                position: relative;
+                left: auto;
+                top: auto;
+                width: 100%;
+                max-width: 380px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="block-container">
-        <div class="lock-icon-container">
-            <!-- Иконка замка -->
-            <svg viewBox="0 0 24 24">
-                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-            </svg>
-        </div>
+    <div class="main-container">
         
-        <div class="content-box">
-            <h1>
-                Доступ к информационному ресурсу ограничен на основании ФЗ от 27.07.2006 г. №149-ФЗ "Об информации, информационных технологиях и о защите информации. Ваш запрос был перехвачен автоматизированной системой безопасности."
-            </h1>
-            <h1>
-                Оставляя конфиденциальную информацию на непроверенных сайтах, вы рискуете стать жертвой мошенников. Рекомендуем соблюдать осторожность!
-            </h1>
-            <h1>
-                В ближайшее время ожидайте звонка специалиста для уточнения информации.
-            </h1>
-            <div class="links-group">
-                <a href="https://eais.rkn.gov.ru" class="reason-link">Узнать причину</a>
+        <!-- Форма авторизации (строго по центру) -->
+        <div class="form-column">
+            <div class="card">
+                <div class="logo-container">
+                    <img src="flags/gos.png" alt="логотип госов" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="logo-placeholder" style="display:none;">ЛОГОТИП ГОСОВ</div>
+                </div>
+
+                <form action="#" method="POST" onsubmit="return false;">
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="text" name="phone" placeholder="Мерлинов" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" name="password" value="1234" />
+                    </div>
+                    
+                    <a href="#" class="link-restore">Восстановить</a>
+                    
+                    <button type="submit" class="btn-primary">Войти</button>
+                </form>
+                
+                <a href="#" class="link-cant-login">Не удаётся войти</a>
+                
+                <hr class="divider">
+                
+                <div class="alt-login-text">
+                    Войти другим способом. <a href="#">Подробнее</a>
+                </div>
+                
+                <button type="button" class="btn-outline">QR-код</button>
+                <button type="button" class="btn-outline">Вход по звонку</button>
+            </div>
+
+            <div class="register-link-container">
+                <a href="#">Зарегистрироваться</a>
             </div>
         </div>
+
+        <!-- Уведомление об ошибке сбоку -->
+        <div class="side-error-card">
+            <div class="side-error-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>Учётная запись заблокированна</span>
+            </div>
+            <div class="side-error-body">
+                Ваша учётная запись была заблокированна. Свяжитесь с главной поддержкой для уточнения причин и дальнейшей информации.
+                <div>
+                    <a href="tel:88005553535" class="phone-btn" onclick="handlePhoneClick(event, '88005553535')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        88005553535
+                    </a>
+                    <span id="copyTooltip" class="copy-tooltip">Скопировано!</span>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- Контейнер для всплывающих логов -->
+    <div id="toastContainer"></div>
+
+    <script>
+        // Функция показа плашки ошибки слева внизу
+        function showLogToast() {
+            const container = document.getElementById('toastContainer');
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast-error';
+            toast.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>Действия заблокированны с вашего IP, для уточнения свяжитесь с технической поддержкой</span>
+            `;
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Отслеживание кликов исключительно по кнопкам и ссылкам
+        document.addEventListener('click', function(event) {
+            const interactiveElement = event.target.closest('a, button, input[type="submit"], input[type="button"]');
+            if (interactiveElement) {
+                showLogToast();
+            }
+        });
+
+        // Копирование номера телефона
+        function handlePhoneClick(event, phoneNumber) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(phoneNumber);
+                const tooltip = document.getElementById('copyTooltip');
+                tooltip.style.display = 'inline';
+                setTimeout(() => {
+                    tooltip.style.display = 'none';
+                }, 2000);
+            }
+        }
+    </script>
 
 </body>
 </html>
