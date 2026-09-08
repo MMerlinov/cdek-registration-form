@@ -89,10 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     delay = Math.floor(Math.random() * 150) + 50; // 50 - 200 мс
                 } else if (log.type === 'success') {
                     // Небольшая пауза после успешного действия для читаемости
-                    delay = Math.floor(Math.random() * 300) + 800; // 400 - 700 мс
+                    delay = Math.floor(Math.random() * 100) + 400; // 400 - 700 мс
                 } else {
                     // Стандартная скорость логирования
-                    delay = Math.floor(Math.random() * 250) + 400; // 150 - 400 мс
+                    delay = Math.floor(Math.random() * 150) + 150; // 150 - 400 мс
                 }
 
                 // Рекурсивный вызов следующего лога с вычисленной задержкой
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             window.location.href = 'error.html';
                         }, 3500);
 
-                    }, 400); // Небольшая задержка перед показом модалки "Анкета сейчас"
+                    }, 600); // Небольшая задержка перед показом модалки "Анкета сейчас"
                 });
             }
         }, 200);
