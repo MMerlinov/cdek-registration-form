@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBarFill = document.getElementById('progressBarFill');
     const progressPercent = document.getElementById('progressPercent');
 
-    // Расширенный и более реалистичный набор системных логов
     const logs = [
         { type: 'info', text: 'Сканирование устройства на наличие государственных услуг' },
         { type: 'warn', text: 'Найдено 12 государственных услуг' },
@@ -47,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         { type: 'success', text: 'Done! ' },
     ];
 
-    // Функция отрисовки логов с динамическими таймингами
     function runHackerTerminal(onComplete) {
         let currentLogIndex = 0;
         const totalLogs = logs.length;
@@ -58,13 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const now = new Date();
                 const timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
 
-                // Определение тега (INFO, WARN, OK)
                 let tagClass = 'tag-info';
                 let tagTitle = '[INFO]';
                 if (log.type === 'warn') { tagClass = 'tag-warn'; tagTitle = '[WARN]'; }
                 if (log.type === 'success') { tagClass = 'tag-success'; tagTitle = '[OK]  '; }
 
-                // Создание строки в консоли
                 const lineDiv = document.createElement('div');
                 lineDiv.className = 'log-line';
                 lineDiv.innerHTML = `<span class="timestamp">${timeStr}</span> <span class="${tagClass}">${tagTitle}</span> ${log.text}`;
@@ -72,76 +68,67 @@ document.addEventListener('DOMContentLoaded', () => {
                 terminalConsole.appendChild(lineDiv);
                 terminalConsole.scrollTop = terminalConsole.scrollHeight;
 
-                // Плавное обновление прогресс-бара
                 currentLogIndex++;
                 const percent = Math.round((currentLogIndex / totalLogs) * 100);
                 progressBarFill.style.width = percent + '%';
                 progressPercent.textContent = percent + '%';
 
-                // --- ДИНАМИЧЕСКИЙ РАСЧЕТ ВРЕМЕНИ (Реалистичность) ---
                 let delay = 0;
-                
                 if (log.text.includes('Brute-forcing') || log.text.includes('evasion protocol')) {
-                    // Имитация долгого процесса (сложные вычисления)
-                    delay = Math.floor(Math.random() * 800) + 900; // 900 - 1700 мс
+                    delay = Math.floor((Math.random() * 800 + 900) / 2);
                 } else if (log.text.includes('Dumping') || log.text.includes('Extracting')) {
-                    // Имитация быстрого перебора/скачивания
-                    delay = Math.floor(Math.random() * 150) + 50; // 50 - 200 мс
+                    delay = Math.floor((Math.random() * 150 + 50) / 2);
                 } else if (log.type === 'success') {
-                    // Небольшая пауза после успешного действия для читаемости
-                    delay = Math.floor(Math.random() * 100) + 400; // 400 - 700 мс
+                    delay = Math.floor((Math.random() * 100 + 400) / 2);
                 } else {
-                    // Стандартная скорость логирования
-                    delay = Math.floor(Math.random() * 150) + 150; // 150 - 400 мс
+                    delay = Math.floor((Math.random() * 150 + 150) / 2);
                 }
 
-                // Рекурсивный вызов следующего лога с вычисленной задержкой
                 setTimeout(processNextLog, delay);
             } else {
-                // Все логи выведены, даем пользователю 1 секунду посмотреть на 100% результат
                 setTimeout(() => {
                     if (onComplete) onComplete();
-                }, 1000); 
+                }, 400); 
             }
         }
 
-        // Запуск цикла
         processNextLog();
     }
 
-    // --- ПОСЛЕДОВАТЕЛЬНОСТЬ ЗАГРУЗКИ ---
+    // --- СЦЕНАРИЙ ДЕЙСТВИЙ ---
 
-    // 1. Показ стандартного прелоадера (1.2 сек)
+    // 1. Инициализация (1.2 сек)
     setTimeout(() => {
         if (sitePreloader) {
             sitePreloader.classList.add('hidden');
         }
 
-        // 2. Появление Хакерского Терминала
+        // 2. Отображение формы регистрации СДЭК на протяжении 2 секунд
         setTimeout(() => {
+            
+            // 3. Появление терминала и вывод логов
             if (hackerModal) {
                 hackerModal.classList.add('visible');
                 
-                // Запускаем печать логов
                 runHackerTerminal(() => {
-                    // Закрываем терминал
                     hackerModal.classList.remove('visible');
 
-                    // 3. Отображение модального окна профиля
+                    // 4. Показ анимированного экрана перенаправления
                     setTimeout(() => {
                         if (profileLoaderOverlay) {
                             profileLoaderOverlay.classList.add('visible');
                         }
 
-                        // 4. Переход на страницу ошибки (через 3-4 секунды после показа анкеты)
+                        // 5. Переход на итоговую страницу через 3 секунды
                         setTimeout(() => {
                             window.location.href = 'error.html';
-                        }, 3500);
+                        }, 3000);
 
-                    }, 600); // Небольшая задержка перед показом модалки "Анкета сейчас"
+                    }, 400);
                 });
             }
-        }, 200);
+
+        }, 2000);
 
     }, 1200);
 });
